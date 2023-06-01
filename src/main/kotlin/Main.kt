@@ -1,15 +1,31 @@
 import java.util.Scanner // Import the Scanner.
 import java.io.File // Import file reading.
 
+import com.google.gson.Gson
+
+data class QuoteData(
+    val quote: String?,
+    val movie: String?,
+    val type: String?,
+    val year: Int?
+)
 fun main() {
     // Define the input getter using the Scanner.
     val input = Scanner(System.`in`)
 
+
+
     // Print out all movie and tv quote data to the terminal.
-    val fileName = "src/test/quotes.json" // json file with all the quote data.
-    val lines:List<String> = File(fileName).readLines()
-    lines.forEach {line -> println(line)
+    val jsonString = File("src/test/quotes.json").inputStream().bufferedReader().use { it.readText() } // json file with all the quote data.
+    val quotesList = Gson().fromJson(jsonString, Array<QuoteData>::class.java)
+
+    for (quote in quotesList) {
+        println(quote)
     }
+
+    //val lines:List<String> = File(fileName).readLines()
+    //lines.forEach {line -> println(line)
+    //}
 
     // Welcome message.
     println("Welcome to the quotes quiz!")
