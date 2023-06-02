@@ -1,6 +1,7 @@
 import java.util.Scanner // Import the Scanner.
 import java.io.File // Import file reading.
 import com.google.gson.Gson // Import Gson for handling json data.
+import java.util.InputMismatchException
 import kotlin.random.Random // Import random number generation.
 
 // The quote data object.
@@ -37,19 +38,39 @@ fun main() {
     // Welcome message.
     println("Welcome to the quotes quiz!")
     println()
+    println("Enter the type of media you want to get quotes for " +
+            "and how many questions you want to get started!")
+    print("Press ENTER to start: ")
+    readln()
+    println()
 
     // Prompt the user to pick between movie or t.v. quotes.
     var typeInput = 'A'
-    print("Would you like to do movie quotes or television quotes? Type M for movies or T for Television: ")
+    println("Would you like to do movie quotes or television quotes?")
     while (typeInput != 'M' && typeInput != 'T') {
+        print("Type M for movies or T for Television: ")
         typeInput = input.next()[0]
     }
 
     // Have the user pick a duration for the quiz.
     var totalQuestions = 0
-    print("How many questions will be in the quiz? ")
-    while (totalQuestions <= 0) {
-        totalQuestions = input.nextInt()
+    println("How many questions will be in the quiz?")
+    while (totalQuestions <= 0
+        || totalQuestions >= movieQuoteList.size // Used to ensure the user doesn't go over the total possible questions.
+        || totalQuestions >= tvQuoteList.size) { // Same as above.
+        try {
+            print("Number of questions(int): ")
+            totalQuestions = input.nextInt()
+            if (totalQuestions >= movieQuoteList.size
+                || totalQuestions >= tvQuoteList.size) {
+                println("Total questions is too high!")
+            }
+        }
+        // Handle errors if the user inputs a non-int.
+        catch (exception: InputMismatchException) {
+            input.next()
+            println("Please enter a positive int.")
+        }
     }
 
     // Blank line.
@@ -83,10 +104,11 @@ fun runQuiz(totalQuestions: Int,
     var answeredQuestions = 0
     var correctQuestions = 0
 
+    // Initialize list of used quotes.
+    val usedQuotes = mutableListOf<QuoteData>()
+
     // Start the quiz, and continue until time runs out.
     while(answeredQuestions != totalQuestions) {
-        // Increment total questions.
-        answeredQuestions++
 
         // Get a random quote.
         val quote:QuoteData = if (typeInput == 'M') {
@@ -94,6 +116,15 @@ fun runQuiz(totalQuestions: Int,
         } else {
             tvQuoteList[Random.nextInt(0, tvQuoteList.size)]
         }
+
+        // Prevent questions from being reused.
+        if (usedQuotes.contains(quote)) {
+            continue
+        }
+
+        // Increment total questions.
+        answeredQuestions++
+
         // Print a random quote.
         println("Quote: ${quote.quote}")
 
@@ -110,6 +141,7 @@ fun runQuiz(totalQuestions: Int,
         else {
             println("Incorrect. Correct answer: ${quote.movie}")
         }
+        usedQuotes += quote
         // Blank line.
         println()
     }
