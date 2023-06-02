@@ -25,6 +25,9 @@
 - [Movie/tv quotes GitHub repository by Nikhil N Namal (I copied his data.json file to quotes.json)](https://github.com/NikhilNamal17/popular-movie-quotes)
 - [How to read a json file in Kotlin](https://www.youtube.com/watch?v=KOqZVJLNKXA)
 - [Serialization](https://kotlinlang.org/docs/serialization.html#example-json-serialization)
+- [Using Gson with Kotlin objects](https://www.baeldung.com/kotlin/gson-typetoken)
+- [Random numbers in Kotlin](https://www.tutorialspoint.com/how-can-i-get-a-random-number-in-kotlin)
+- 
 # Future Work
 
 {Make a list of things that you need to fix, improve, and add in the future.}

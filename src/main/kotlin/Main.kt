@@ -1,55 +1,117 @@
 import java.util.Scanner // Import the Scanner.
 import java.io.File // Import file reading.
+import com.google.gson.Gson // Import Gson for handling json data.
+import kotlin.random.Random // Import random number generation.
 
-import com.google.gson.Gson
-
+// The quote data object.
 data class QuoteData(
-    val quote: String?,
-    val movie: String?,
-    val type: String?,
-    val year: Int?
+    val quote: String?, // The quote.
+    val movie: String?, // The title of the movie/show.
+    val type: String?, // The type (movie, tv, anime...)
+    val year: Int? // Year the title came out.
 )
+
 fun main() {
     // Define the input getter using the Scanner.
     val input = Scanner(System.`in`)
 
+    // Get the json file.
+    val jsonString = File("src/test/quotes.json").inputStream().bufferedReader().use { it.readText() }
 
-
-    // Print out all movie and tv quote data to the terminal.
-    val jsonString = File("src/test/quotes.json").inputStream().bufferedReader().use { it.readText() } // json file with all the quote data.
+    // Initialize lists and arrays.
+    // Create QuoteData data objects from the json file.
     val quotesList = Gson().fromJson(jsonString, Array<QuoteData>::class.java)
+    val movieQuoteList = mutableListOf<QuoteData>()
+    val tvQuoteList = mutableListOf<QuoteData>()
 
+    // Separate the quotes into lists of movies and tv shows.
     for (quote in quotesList) {
-        println(quote)
+        if(quote.type == "movie") {
+            movieQuoteList += quote
+        }
+        else {
+            tvQuoteList += quote
+        }
     }
-
-    //val lines:List<String> = File(fileName).readLines()
-    //lines.forEach {line -> println(line)
-    //}
 
     // Welcome message.
     println("Welcome to the quotes quiz!")
     println()
 
     // Prompt the user to pick between movie or t.v. quotes.
+    var typeInput = 'A'
     print("Would you like to do movie quotes or television quotes? Type M for movies or T for Television: ")
-    val typeInput: Char = input.next()[0]
+    while (typeInput != 'M' && typeInput != 'T') {
+        typeInput = input.next()[0]
+    }
 
     // Have the user pick a duration for the quiz.
-    print("How long will the quiz be in seconds? ")
-    val quizDuration = input.nextInt()
+    var totalQuestions = 0
+    print("How many questions will be in the quiz? ")
+    while (totalQuestions <= 0) {
+        totalQuestions = input.nextInt()
+    }
 
-    // Have the user pick a time limit for each question.
-    print("How much time will be given for each question in seconds? ")
-    val questionDuration = input.nextInt()
+    // Blank line.
+    println()
 
-    // Start the quiz, and continue until time runs out.
+    val correctQuestions = runQuiz(totalQuestions, typeInput, movieQuoteList, tvQuoteList)
 
-    // The quiz displays a quote, and the user must guess who the quote was said by.
-    // You only get one guess for each quote.
     // The program counts how many questions you get right, and total questions.
+    // If the user gets a perfect score, print a special message.
+    if (correctQuestions == totalQuestions) {
+        println("Amazing! You got a perfect score!")
+    }
+    else {
+        println("You got $correctQuestions/$totalQuestions answers right.")
+    }
 
     // After the quiz has run, the program prints a goodbye message and ends.
     println()
-    print("The quiz is over!")
+    print("The quiz is over! Press ENTER to exit: ")
+    readln()
+}
+
+// The function containing the quiz loop.
+// Returns total correct answers as an int.
+fun runQuiz(totalQuestions: Int,
+            typeInput: Char,
+            movieQuoteList: MutableList<QuoteData>,
+            tvQuoteList: MutableList<QuoteData>): Int {
+
+    // Initialize correct questions amount.
+    var answeredQuestions = 0
+    var correctQuestions = 0
+
+    // Start the quiz, and continue until time runs out.
+    while(answeredQuestions != totalQuestions) {
+        // Increment total questions.
+        answeredQuestions++
+
+        // Get a random quote.
+        val quote:QuoteData = if (typeInput == 'M') {
+            movieQuoteList[Random.nextInt(0, movieQuoteList.size)]
+        } else {
+            tvQuoteList[Random.nextInt(0, tvQuoteList.size)]
+        }
+        // Print a random quote.
+        println("Quote: ${quote.quote}")
+
+        // Get the user's guess.
+        print("What is this quote from? ")
+        val guess = readln()
+
+        // Check if the input is correct.
+        // Output a message indicating if the answer was correct or incorrect.
+        if (guess.equals(quote.movie, ignoreCase=true)) {
+            println("Correct!")
+            correctQuestions++
+        }
+        else {
+            println("Incorrect. Correct answer: ${quote.movie}")
+        }
+        // Blank line.
+        println()
+    }
+    return correctQuestions
 }
