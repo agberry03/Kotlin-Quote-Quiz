@@ -1,28 +1,25 @@
 # Overview
 
-{Important! Do not say in this section that this is college assignment. Talk about what you are trying to accomplish as a software engineer to further your learning.}
+I created a program that asks the user to select a number of random movie or tv quotes
+to be quizzed on. The program will then proceed with the quiz, tracking how many questions
+the user gets right. When the quiz is over, the total number of correct questions is shown
+and the program terminates on user input.
 
-{Provide a description of the software that you wrote to demonstrate the Kotlin language.}
+I wrote this program to introduce myself to Kotlin and become more familiar with the language.
 
-{Describe your purpose for writing this software.}
-
-{Provide a link to your YouTube demonstration. It should be a 4-5 minute demo of the software running and a walkthrough of the code. Focus should be on sharing what you learned about the language syntax.}
-
-[Software Demo Video](http://youtube.link.goes.here)
+[Program Demonstration Video](https://www.youtube.com/watch?v=XkUMuoInYXs)
 
 # Development Environment
 
-{Describe the tools that you used to develop the software}
+I used the Intellij Idea IDE.
 
-{Describe the programming language that you used and any libraries.}
+I used the Kotlin programming language with Gradle and the Gson library.
 
 # Useful Websites
 
-{Make a list of websites that you found helpful in this project}
-
 - [Programiz Kotlin Tutorial](https://www.programiz.com/kotlin-programming)
 - [Kotlin YouTube Tutorial](https://www.youtube.com/watch?v=F9UC9DY-vIU)
-- [Movie/tv quotes GitHub repository by Nikhil N Namal (I copied his data.json file to quotes.json)](https://github.com/NikhilNamal17/popular-movie-quotes)
+- [Movie/tv quotes GitHub repository by Nikhil N Namal (I used his data.json file to populate quotes.json)](https://github.com/NikhilNamal17/popular-movie-quotes)
 - [How to read a json file in Kotlin](https://www.youtube.com/watch?v=KOqZVJLNKXA)
 - [Serialization](https://kotlinlang.org/docs/serialization.html#example-json-serialization)
 - [Using Gson with Kotlin objects](https://www.baeldung.com/kotlin/gson-typetoken)
@@ -30,8 +27,7 @@
 - 
 # Future Work
 
-{Make a list of things that you need to fix, improve, and add in the future.}
-
-- Item 1
-- Item 2
-- Item 3
+- Add the option to quiz on both movie and tv quotes.
+- Use a more robust list of json quotes.
+- Check the accuracy of the quote list.
+- Use the year value in the data class.
